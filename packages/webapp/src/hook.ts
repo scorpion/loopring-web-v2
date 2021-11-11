@@ -3,7 +3,7 @@ import { useCustomDCEffect } from 'hooks/common/useCustomDCEffect';
 import { useSystem } from './stores/system';
 import { ChainId } from '@loopring-web/loopring-sdk';
 import { useAmmMap } from './stores/Amm/AmmMap';
-import { SagaStatus } from '@loopring-web/common-resources';
+import { ConnectProviders, SagaStatus } from '@loopring-web/common-resources';
 import { useTokenMap } from './stores/token';
 import { useAccount } from './stores/account';
 import { connectProvides, walletServices } from '@loopring-web/web3-provider';
@@ -14,6 +14,7 @@ import { useUserRewards } from './stores/userRewards';
 import { useTokenPrices } from './stores/tokenPrices';
 import { useAmount } from './stores/amount';
 import { useSocket } from './stores/socket';
+import { useTheme } from '@emotion/react';
 
 // import { statusUnset as accountStatusUnset } from './stores/account';
 
@@ -42,14 +43,24 @@ export function useInit() {
     const {status: tickerStatus, statusUnset: tickerStatusUnset} = useTicker();
     const {status: amountStatus, statusUnset: amountStatusUnset} = useAmount();
     const {status: socketStatus, statusUnset: socketUnset} = useSocket();
-
+    const theme = useTheme();
 
     useCustomDCEffect(async () => {
         // TODO getSessionAccount infor
 
         if (account.accAddress !== '' && account.connectName && account.connectName !== 'unknown') {
             try {
-                await connectProvides[ account.connectName ](account.accAddress);
+                switch (account.connectName) {
+                    case ConnectProviders.MetaMask:
+                        await connectProvides[ ConnectProviders.MetaMask ]();
+                        break
+                    case ConnectProviders.WalletLink:
+                        await connectProvides[ ConnectProviders.WalletLink ](theme);
+                        break
+                    case ConnectProviders.WalletConnect:
+                        await connectProvides[ ConnectProviders.WalletConnect ](account.accAddress);
+                        break
+                }                                 
                 updateAccount({})
                 if (connectProvides.usedProvide && connectProvides.usedWeb3) {
 

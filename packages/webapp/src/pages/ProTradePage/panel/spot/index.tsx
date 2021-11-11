@@ -165,8 +165,7 @@ export const SpotView = withTranslation('common')(({
                   tokenPriceProps={{
                       handleError: handlePriceError as any,
                       decimalsLimit: marketMap[ market ]?.precisionForPrice
-                  }
-                  }
+                  }}
                   tradeType={pageTradePro.tradeType}
                   tokenBaseProps={{disabled: isLimitLoading, decimalsLimit: tokenMap[ baseSymbol ].precision}}
                   tokenQuoteProps={{disabled: isLimitLoading, decimalsLimit: tokenMap[ quoteSymbol ].precision}}

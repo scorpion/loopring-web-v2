@@ -7,13 +7,15 @@ import { ConnectProviders } from '@loopring-web/common-resources';
 
 export const MetaMaskProvide = async (): Promise<{ provider: IpcProvider, web3: Web3 } | undefined> => {
     try {
-        const provider: any = await detectEthereumProvider();
+        const provider: any = await detectEthereumProvider({mustBeMetaMask:true});
         const ethereum: any = window.ethereum;
-        if (provider && ethereum) {
+
+        if (provider && ethereum && ethereum.isMetaMask) {
+            // const metamaskProvider:IpcProvider = ethereum.find((provider:IpcProvider & {isMetaMask:boolean}) => provider.isMetaMask);
             const web3 = new Web3(provider as any);
             await ethereum.request({method: 'eth_requestAccounts'});
             walletServices.sendConnect(web3, provider);
-            return {provider, web3}
+            return {provider:provider, web3}
         } else {
             return undefined
         }
@@ -41,6 +43,16 @@ export const MetaMaskSubscribe = (provider: any, web3: Web3) => {
         provider.on("disconnect", (code: number, reason: string) => {
 
             walletServices.sendDisconnect(code, reason);
+
+        });
+        provider.on("message", (payload:any) => {
+            if (payload && payload.type === 'eth_subscription' && payload.data) {
+                const data = payload.data;
+                console.log('message','xxxxxxxxxxxx')
+                // if (data.subscription && _this.subscriptions.has(data.subscription)) {
+                //     _this.subscriptions.get(data.subscription).callback(null, data.result);
+                // }
+            }
 
         });
     }

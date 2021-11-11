@@ -33,7 +33,7 @@ export interface PanelProps {
         btnTxt: any,
         callback: (e?: any) => void,
     }
-    providerName?: 'MetaMask' | 'WalletConnect' | 'unknown'
+    providerName?: Omit<ConnectProviders,ConnectProviders.unknown>
     link?: {
         name: string,
         url: string,
@@ -86,7 +86,7 @@ export const BasicPanel = withTranslation('common', { withRef: true })(({
         if (providerName) {
             switch (providerName) {
                 case ConnectProviders.MetaMask:
-                    return <Trans i18nKey={'labelMetaMaskProcessDescribe'}>
+                    return <Trans i18nKey={'labelMetaMaskProcessDescribe'} tOptions={{provider:'MetaMask'}}>
                         Please click approve button on MetaMask popup window.
                         When MetaMask dialog is dismiss,
                         please manually click <img alt="MetaMask" style={{ verticalAlign: 'text-bottom' }}
@@ -95,6 +95,13 @@ export const BasicPanel = withTranslation('common', { withRef: true })(({
                 case ConnectProviders.WalletConnect:
                     return <Trans i18nKey={'labelWalletConnectProcessDescribe2'}>
                         Please click approve on your device.</Trans>
+                case ConnectProviders.WalletLink:
+                    return <Trans i18nKey={'labelWalletLinkProcessDescribe'} tOptions={{provider:'CoinBase Wallet'}}>
+                        Please click approve button on CoinBase Wallet popup window.
+                        When CoinBase Wallet dialog is dismiss,
+                        please manually click <img alt="walletLink" style={{ verticalAlign: 'text-bottom' }}
+                                                   src={SoursURL+'images/MetaMaskPlugIn.png'} /> on your browser toolbar.
+                    </Trans>
                 default:
                     break
             }

@@ -4,10 +4,12 @@ import { IpcProvider } from 'web3-core';
 import Web3 from 'web3';
 import WalletConnectProvider from '@walletconnect/web3-provider';
 import { ConnectProviders } from '@loopring-web/common-resources';
+import { WalletLinkProvide, WalletLinkSubscribe, WalletLinkUnsubscribe } from './coinBaseWallet';
+import { WalletLinkProvider } from 'walletlink';
 
 
 export class ConnectProvides {
-    public usedProvide: undefined | IpcProvider | WalletConnectProvider;
+    public usedProvide: undefined | IpcProvider | WalletConnectProvider | WalletLinkProvider;
     public usedWeb3: undefined | Web3;
 
     private _provideName: string | undefined;
@@ -46,6 +48,23 @@ export class ConnectProvides {
 
     };
 
+    public WalletLink = async (theme?:any) => {
+        this._provideName = ConnectProviders.WalletLink;
+        this.clearProviderSubscribe();
+        try {
+            const obj = await WalletLinkProvide(theme);
+            if (obj) {
+                this.usedProvide = obj.provider
+                this.usedWeb3 = obj.web3
+            }
+            console.log('WalletLink subScribe')
+            this.subScribe()
+        }catch (e){
+            throw e;
+        }
+
+    };
+
     public clear = async () => {
         return await this.clearProviderSubscribe();
     }
@@ -65,6 +84,11 @@ export class ConnectProvides {
                 delete this.usedProvide;
                 delete this.usedWeb3;
                 break;
+            case  ConnectProviders.WalletLink:
+                await WalletLinkUnsubscribe(this.usedProvide);
+                delete this.usedProvide;
+                delete this.usedWeb3;
+                break;
         }
         
         return
@@ -77,6 +101,9 @@ export class ConnectProvides {
                 break
             case  ConnectProviders.MetaMask:
                 MetaMaskSubscribe(this.usedProvide, this.usedWeb3 as Web3)
+                break
+            case  ConnectProviders.WalletLink:
+                WalletLinkSubscribe(this.usedProvide, this.usedWeb3 as Web3)
                 break
         }
     }

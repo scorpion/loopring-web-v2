@@ -180,7 +180,7 @@ export default {
     labelActivatedAccountNotSupport: 'We are apologize, Loopring app not support your address current now.',
     labelProcessing: 'Processing',
     labelMetaMaskProcessing: 'Connect Wallet with MetaMask...',
-    labelMetaMaskProcessDescribe: 'Please click ‘Approve’ button on MetaMask popup window. If MetaMask dialog is dismissed, please manually click <1></1> on your browser toolbar.',
+    labelMetaMaskProcessDescribe: 'Please click ‘Approve’ button on {{provider}} popup window. If {{provider}} dialog is dismissed, please manually click <1></1> on your browser toolbar.',
     labelWalletConnectProcessing: 'Connect Wallet with WalletConnect...',
     labelWalletConnectProcessDescribe: 'Please wait for WalletConnect provider to confirm processing',
     labelWalletConnectQRCode: 'Please scan the QR code with a WalletConnect compatible application',

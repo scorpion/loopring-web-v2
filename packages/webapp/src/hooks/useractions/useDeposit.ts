@@ -193,17 +193,17 @@ export const useDeposit = <R extends IBData<T>, T>(): {
         if ((readyState !== AccountStatus.UN_CONNECT
             && inputValue.tradeValue)
             && tokenMap && exchangeInfo?.exchangeAddress
-            && connectProvides.usedWeb3 && LoopringAPI.exchangeAPI) {
+            && connectProvides.usedWeb3 && connectProvides.usedProvide && LoopringAPI.exchangeAPI) {
             try {
                 const tokenInfo = tokenMap[inputValue.belong]
                 const gasLimit = parseInt(tokenInfo.gasAmounts.deposit)
 
                 const fee = 0
+                const isMetaMask = true;
+                //connectProvides.usedProvide?.isMetaMask;
+                // || connectName === ConnectProviders.WalletConnect
 
-                // const isMetaMask = connectName === ConnectProviders.MetaMask
-                //    || connectName === ConnectProviders.WalletConnect
-
-                const isMetaMask = true
+                // const isMetaMask = true
 
                 const realGasPrice = gasPrice ?? 30
 

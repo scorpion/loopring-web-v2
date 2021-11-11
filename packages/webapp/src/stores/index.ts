@@ -12,7 +12,14 @@ import { updateVersion } from './global/actions'
 import createSagaMiddleware from 'redux-saga'
 import { reduxBatch } from '@manaflair/redux-batch'
 import accountSlice from './account/reducer'
-import { modalsSlice, setCoinJson, setLanguage, settingsSlice, SettingsState, } from '@loopring-web/component-lib';
+import {
+    modalsSlice, PlatFormType,
+    setCoinJson,
+    setLanguage,
+    setPlatform,
+    settingsSlice,
+    SettingsState,
+} from '@loopring-web/component-lib';
 import { ammReducer } from './Amm';
 import { tokenMapSlice } from './token';
 import { tickerMapSlice } from './ticker';
@@ -114,6 +121,9 @@ fetch(`https://static.loopring.io/assets/images/coin/loopring.json`)
     store.dispatch(setCoinJson(imgConfig.frames))
 
 })
+
+var isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+store.dispatch(setPlatform(isMobile?PlatFormType.mobile:PlatFormType.desktop));
 // async function imageConfig() {
 //     const imgConfig = (await .json();
 //

@@ -11,6 +11,10 @@ export const gatewayList: GatewayItem[] = [
         key: ConnectProviders.WalletConnect,
         imgSrc: SoursURL+'svg/wallet-connect.svg',
     },
+    {
+        key: ConnectProviders.WalletLink,
+        imgSrc: SoursURL+'svg/coinbase-wallet.svg',
+    },
     // {
     //     key: 'Ledger',
     //     imgSrc: 'http://static.loopring.io/assets/svg/ledger.svg',

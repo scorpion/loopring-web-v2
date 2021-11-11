@@ -2,7 +2,7 @@ import WalletConnectProvider from '@walletconnect/web3-provider';
 import Web3 from "web3";
 import { walletServices } from '../walletServices';
 import { ErrorType } from '../command';
-import { ConnectProviders, myLog } from '@loopring-web/common-resources';
+import { ConnectProviders } from '@loopring-web/common-resources';
 
 // const BRIDGE_URL = process.env.REACT_APP_WALLET_CONNECT_BRIDGE ?? 'https://bridge.walletconnect.org'
 
@@ -22,6 +22,7 @@ export const WalletConnectProvide = async (account?: string): Promise<{ provider
         }).catch(()=>{
             return  'https://bridge.walletconnect.org';
         }))
+
         const provider: WalletConnectProvider = new WalletConnectProvider({
             rpc: RPC_URLS,
             bridge: BRIDGE_URL,
@@ -29,11 +30,17 @@ export const WalletConnectProvide = async (account?: string): Promise<{ provider
             qrcode: false,
         });
         const {connector} = provider;
-        let web3: Web3|undefined
+        let web3: Web3|undefined;
+
         if (!connector.connected && account === undefined) {
             await connector.createSession();
             const uri = connector.uri;
-            walletServices.sendProcess('nextStep', {qrCodeUrl: uri});
+            const  isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+            if(isMobile){
+
+            }else{
+                walletServices.sendProcess('nextStep', {qrCodeUrl: uri});
+            }
             await provider.enable();
             web3 = new Web3(provider as any);
             walletServices.sendConnect(web3, provider);

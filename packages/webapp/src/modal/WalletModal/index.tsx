@@ -28,6 +28,7 @@ import { myLog, copyToClipBoard, } from "@loopring-web/common-resources";
 import { TOAST_TIME } from '../../defs/common_defs';
 import { useSelector } from 'react-redux';
 import { RootState } from 'stores';
+import { useTheme } from '@emotion/react';
 
 export const ModalWalletConnectPanel = withTranslation('common')(({
                                                                       onClose,
@@ -53,7 +54,7 @@ export const ModalWalletConnectPanel = withTranslation('common')(({
     } = useAccount();
     const {updateSystem, chainId: _chainId, exchangeInfo} = useSystem();
     const {modals: {isShowConnect}, setShowConnect, setShowAccount} = useOpenModals();
-
+    const theme = useTheme()
     const qrCodeUrl = useSelector((state: RootState) => state.account.qrCodeUrl)
 
     const [stateCheck, setStateCheck] = React.useState<boolean>(false);
@@ -85,6 +86,21 @@ export const ModalWalletConnectPanel = withTranslation('common')(({
             return
         }
     }, [_chainId]);
+    const walletLinkCallback = React.useCallback(async () => {
+        updateAccount({connectName: ConnectProviders.WalletLink});
+        await connectProvides.WalletLink(theme);
+
+        // statusAccountUnset();
+        if (connectProvides.usedProvide) {
+            let chainId: ChainId = Number(await connectProvides.usedWeb3?.eth.getChainId());
+            chainId = (chainId && chainId === ChainId.GOERLI ? chainId as ChainId : ChainId.MAINNET)
+            if (chainId !== _chainId) {
+                updateSystem({chainId})
+            }
+            return
+        }
+    }, [_chainId]);
+
     const _onClose = React.useCallback(async (e: any) => {
         setShouldShow(false);
         setShowConnect({isShow: false});
@@ -131,6 +147,20 @@ export const ModalWalletConnectPanel = withTranslation('common')(({
                 setStateCheck(true)
             }, [account])
         },
+        {
+            ...DefaultGatewayList[ 2 ],
+            handleSelect: React.useCallback(async (event, flag?) => {
+                if (!flag && account.connectName === DefaultGatewayList[ 2 ].key) {
+                    setShowConnect({isShow: false});
+                } else {
+                    walletServices.sendDisconnect('', 'should new provider')
+                    setShowConnect({isShow: true, step: WalletConnectStep.MetaMaskProcessing});
+                    setProcessingCallback({callback: walletLinkCallback});
+                    setStateCheck(true)
+                }
+            },[])
+        },
+
 
     ]
 

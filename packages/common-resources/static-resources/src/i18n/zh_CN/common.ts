@@ -180,7 +180,7 @@ export default {
     labelActivatedAccountNotSupport: 'We are apologize, Loopring app not support your address current now.',
     labelProcessing: '请稍等片刻',
     labelMetaMaskProcessing: 'MetaMask正在连接路印钱包',
-    labelMetaMaskProcessDescribe: '请在MetaMask的弹出窗口内点击确定按钮。 如果MetaMask插件没有主动弹出窗口, 请在浏览器工具栏中点击 <1></1> 图标。',
+    labelMetaMaskProcessDescribe: '请在{{provider}}的弹出窗口内点击确定按钮。 如果{{provider}}插件没有主动弹出窗口, 请在浏览器工具栏中点击 <1></1> 图标。',
     labelWalletConnectProcessing: 'WalletConnect正在连接路印钱包',
     labelWalletConnectProcessDescribe: '正在等待WalletConnect确认相关信息，请耐心等待片刻。',
     labelWalletConnectQRCode: '请用移动端路印钱包（或支持WalletConnect的应用）扫描二维码',
